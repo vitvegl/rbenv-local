@@ -25,6 +25,6 @@ end
 namespace :deps do
   desc 'Install builddeps'
   task :install do
-    sh "sudo apt-get update && sudo apt-get -y install ruby rake git libssl-dev libreadline-dev zlib1g-dev"
+    sh "sudo apt-get update && sudo apt-get -y install ruby rake git build-essential libssl-dev libreadline-dev zlib1g-dev"
   end
 end
