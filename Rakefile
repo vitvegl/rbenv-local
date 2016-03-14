@@ -4,10 +4,18 @@ module Rbenv
 
   INSTALLED_VERSION = ARGV[1]
 
+  def installed_versions
+    v = `rbenv versions`.split("\n")
+    v.map do |i|
+      i.strip!
+    end
+    v
+  end
+
   def available_versions
-    v = `rbenv install -l`
-    ver = v.split("\n  "); ver.shift
-    return ver
+    v = `rbenv install -l`.split("\n  ")
+    v.shift
+    v
   end
 end
 
@@ -55,9 +63,13 @@ namespace :ruby do
     version = INSTALLED_VERSION
     unless version.nil?
       if available_versions.include?(version)
-        Rake::Task['rbenv:update'].invoke
-        Rake::Task['deps:install'].invoke
-        system "export TMPDIR=\"$HOME/tmp\" && rbenv install #{version}"
+        if !installed_versions.include?(version)
+          Rake::Task['rbenv:update'].invoke
+          Rake::Task['deps:install'].invoke
+          system "export TMPDIR=\"$HOME/tmp\" && rbenv install #{version}"
+        else
+          puts "RUBY_VERSION #{version} installed"
+        end
       else
         puts "RUBY_VERSION #{version} not available"
       end
