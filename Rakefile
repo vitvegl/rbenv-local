@@ -44,7 +44,9 @@ end
 namespace :deps do
   desc 'Install builddeps'
   task :install do
-    sh "sudo apt-get update && sudo apt-get -y install ruby rake git build-essential libssl-dev libreadline-dev zlib1g-dev"
+    sh "sudo apt-get update && sudo apt-get -y install ruby rake git build-essential \
+libssl-dev libreadline-dev zlib1g-dev libgmp-dev libdbm-deep-perl libgdbm3 libgdbm-dev \
+libtcl8.5 tcl8.5 tcl8.5-dev tk8.5 tk8.5-dev doxygen valgrind libffi-dev"
   end
 end
 
@@ -66,7 +68,9 @@ namespace :ruby do
         if !installed_versions.include?(version)
           Rake::Task['rbenv:update'].invoke
           Rake::Task['deps:install'].invoke
-          system "export TMPDIR=\"$HOME/tmp\" && rbenv install #{version}"
+          opts = "--with-tcl-include=/usr/include/tcl8.5/ --with-tcllib=tcl8.5 --with-tklib=tk8.5"
+          tmpdir = File.join(ENV['HOME'], '/tmp')
+          system "export TMPDIR=#{tmpdir} && RUBY_CONFIGURE_OPTS=\"#{opts}\" rbenv install #{version}"
         else
           puts "RUBY_VERSION #{version} installed"
         end
