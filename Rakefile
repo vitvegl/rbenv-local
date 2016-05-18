@@ -70,7 +70,11 @@ namespace :ruby do
           Rake::Task['deps:install'].invoke
           opts = "--with-tcl-include=/usr/include/tcl8.5/ --with-tcllib=tcl8.5 --with-tklib=tk8.5"
           tmpdir = File.join(ENV['HOME'], '/tmp')
-          system "export TMPDIR=#{tmpdir} && RUBY_CONFIGURE_OPTS=\"#{opts}\" rbenv install #{version}"
+          if version =~ /^ruby/
+            system "export TMPDIR=#{tmpdir} && RUBY_CONFIGURE_OPTS=\"#{opts}\" rbenv install #{version}"
+          else
+            system "export TMPDIR=#{tmpdir} && rbenv install #{version}"
+          end
         else
           puts "RUBY_VERSION #{version} installed"
         end
