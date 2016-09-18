@@ -41,6 +41,13 @@ namespace :rbenv do
   end
 end
 
+namespace :rbenv_vars do
+  desc 'Install rbenv-vars plugin'
+  task :install => 'rbenv:install' do
+    sh "cd ~/.rbenv/plugins && git clone https://github.com/sstephenson/rbenv-vars.git"
+  end
+end
+
 namespace :deps do
   desc 'Install builddeps'
   task :install do
